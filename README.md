@@ -1,0 +1,2 @@
+# logistic_apps
+REPOSITORI of STRATEGI ALGORITMA
