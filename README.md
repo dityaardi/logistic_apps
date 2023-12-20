@@ -16,3 +16,5 @@ How to clone and run this project:
 12. Run migrations. This is for database ('php artisan migrate')
 13. Run server ('php artisan serve')
 14. On web browser, access http://localhost:8000
+
+- If you need open the project in Visual Studio Code, write 'code .' in terminal 
