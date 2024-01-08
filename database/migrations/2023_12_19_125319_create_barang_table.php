@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('barang', function (Blueprint $table) {
             $table->id('id_barang');
+            $table->string('kode_produksi')->unique();
+            $table->string('nama_barang');
+            $table->string('grade');
             $table->integer('quantity');
-            $table->unsignedBigInteger('id_gudang');
-            $table->foreign('id_gudang')->references('id_gudang')->on('gudang');
+            $table->date('expired_at');
             $table->timestamps();
         });
     }
