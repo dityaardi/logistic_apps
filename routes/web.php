@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\Dashboard;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [Dashboard::class, 'index']);
+Route::post('/process-request', [Dashboard::class, 'show']);
+
 Route::get('/barang', [BarangController::class, 'index']);
 Route::get('/barang/create', [BarangController::class, 'create']);
 Route::post('/barang/store', [BarangController::class, 'store']);
