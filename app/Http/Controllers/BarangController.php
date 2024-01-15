@@ -38,7 +38,8 @@ class BarangController extends Controller
         ]);
 
         $nmbrg = $request->nama_barang;
-        $kodebarang = 'BRG'.date('d').strtoupper(substr($nmbrg, 0, 2)).date('Y').strtoupper(substr($nmbrg, 2, 2)).date('m').strtoupper(substr($nmbrg, 4));
+        $grade = $request->grade;
+        $kodebarang = 'BRG'.date('d').strtoupper(substr($nmbrg, 0, 2)).date('Y').strtoupper(substr($nmbrg, 2, 2)).date('m').strtoupper(substr($nmbrg, 4)).strtoupper(substr($grade, 0, 1));
 
         $create = new Barang();
         $create->kode_produksi = $kodebarang;
