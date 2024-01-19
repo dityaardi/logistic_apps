@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\DetailTransaksi;
+use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -26,14 +28,38 @@ class Dashboard extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $pengaju = $request->nama_pengajuan;
+        $admin = $request->nama_admin;
+        $notrx = 'TRX' . date('Y') . strtoupper(substr($pengaju, 0, 2)) . date('m') . strtoupper(substr($admin, 0, 2)) . date('d');
+        // Simpan transaksi
+        $trx = new Transaksi();
+        $trx->no_transaksi = $notrx;
+        $trx->nama_pengajuan = $request->nama_pengajuan;
+        $trx->nama_admin = $request->nama_admin;
+        $trx->quantity = $request->quantity_total;
+        $trx->id_user = 1;
+        $trx->save();
 
+        foreach ($request->input('kode_produksi') as $key => $value) {
+            // Kurangi stok barang di database
+            $barang = Barang::where('kode_produksi', $value)->first();
+            $barang->quantity -= $request->input('quantity')[$key];
+            $barang->save();
+
+            // Simpan Detail transaksi
+            $dtltrx = new DetailTransaksi();
+            $dtltrx->no_transaksi = $notrx;
+            $dtltrx->kode_produksi = $request->input('kode_produksi')[$key];
+            $dtltrx->grade = $request->input('grade')[$key];
+            $dtltrx->quantity = $request->input('quantity')[$key];
+            $dtltrx->expired_at = $request->input('expired_at')[$key];
+            $dtltrx->save();
+        }
+
+        return back();
+    }
     /**
      * Display the specified resource.
      */
@@ -56,18 +82,19 @@ class Dashboard extends Controller
         foreach ($barangs as $barang) {
             $quantityToTake = min($remainingQuantity, $barang->quantity);
 
-            $expiredbarang = Carbon::parse($barang->expired_at)->format('d F Y');
+            // $expiredbarang = Carbon::parse($barang->expired_at)->format('d F Y');
+            if ($quantityToTake > 0) {
+                // Simpan barang yang telah dipilih tanpa mengurangi quantity di database
+                $selectedBarangs[] = [
+                    'kode_produksi' => $barang->kode_produksi,
+                    'nama_barang' => $barang->nama_barang,
+                    'grade' => $barang->grade,
+                    'quantity' => $quantityToTake,
+                    'expired_at' => $barang->expired_at,
+                ];
 
-            // Simpan barang yang telah dipilih tanpa mengurangi quantity di database
-            $selectedBarangs[] = [
-                'nama_barang' => $barang->nama_barang,
-                'grade' => $barang->grade,
-                'quantity' => $quantityToTake,
-                'expired_at' => $expiredbarang,
-            ];
-
-            $remainingQuantity -= $quantityToTake;
-
+                $remainingQuantity -= $quantityToTake;
+            }
             // Hentikan iterasi jika jumlah request sudah terpenuhi
             if ($remainingQuantity <= 0) {
                 break;
@@ -77,7 +104,6 @@ class Dashboard extends Controller
         // Kembalikan hasil sebagai respons JSON
         return response()->json($selectedBarangs);
     }
-
     /**
      * Show the form for editing the specified resource.
      */
