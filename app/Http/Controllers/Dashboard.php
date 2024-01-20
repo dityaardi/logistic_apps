@@ -7,6 +7,7 @@ use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Controller
 {
@@ -20,9 +21,6 @@ class Dashboard extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
@@ -30,33 +28,37 @@ class Dashboard extends Controller
 
     public function store(Request $request)
     {
-        $pengaju = $request->nama_pengajuan;
-        $admin = $request->nama_admin;
-        $notrx = 'TRX' . date('Y') . strtoupper(substr($pengaju, 0, 2)) . date('m') . strtoupper(substr($admin, 0, 2)) . date('d');
-        // Simpan transaksi
-        $trx = new Transaksi();
-        $trx->no_transaksi = $notrx;
-        $trx->nama_pengajuan = $request->nama_pengajuan;
-        $trx->nama_admin = $request->nama_admin;
-        $trx->quantity = $request->quantity_total;
-        $trx->id_user = 1;
-        $trx->save();
+        DB::transaction(function () use ($request) {
+            $user = auth()->user();
+            $pengaju = $request->nama_pengajuan;
+            $admin = $user->name;
+            $notrx = 'TRX' . date('Y') . strtoupper(substr($pengaju, 0, 2)) . date('m') . strtoupper(substr($admin, 0, 2)) . date('d');
 
-        foreach ($request->input('kode_produksi') as $key => $value) {
-            // Kurangi stok barang di database
-            $barang = Barang::where('kode_produksi', $value)->first();
-            $barang->quantity -= $request->input('quantity')[$key];
-            $barang->save();
+            // Simpan transaksi
+            $trx = new Transaksi();
+            $trx->no_transaksi = $notrx;
+            $trx->nama_pengajuan = $request->nama_pengajuan;
+            $trx->nama_admin = $user->name;
+            $trx->quantity = $request->quantity_total;
+            $trx->id_user = $user->id;
+            $trx->save();
 
-            // Simpan Detail transaksi
-            $dtltrx = new DetailTransaksi();
-            $dtltrx->no_transaksi = $notrx;
-            $dtltrx->kode_produksi = $request->input('kode_produksi')[$key];
-            $dtltrx->grade = $request->input('grade')[$key];
-            $dtltrx->quantity = $request->input('quantity')[$key];
-            $dtltrx->expired_at = $request->input('expired_at')[$key];
-            $dtltrx->save();
-        }
+            foreach ($request->input('kode_produksi') as $key => $value) {
+                // Kurangi stok barang di database
+                $barang = Barang::where('kode_produksi', $value)->first();
+                $barang->quantity -= $request->input('quantity')[$key];
+                $barang->save();
+
+                // Simpan Detail transaksi
+                $dtltrx = new DetailTransaksi();
+                $dtltrx->no_transaksi = $notrx;
+                $dtltrx->kode_produksi = $request->input('kode_produksi')[$key];
+                $dtltrx->grade = $request->input('grade')[$key];
+                $dtltrx->quantity = $request->input('quantity')[$key];
+                $dtltrx->expired_at = $request->input('expired_at')[$key];
+                $dtltrx->save();
+            }
+        });
 
         return back();
     }
