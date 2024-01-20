@@ -8,6 +8,7 @@ use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Dashboard extends Controller
 {
@@ -30,9 +31,7 @@ class Dashboard extends Controller
     {
         DB::transaction(function () use ($request) {
             $user = auth()->user();
-            $pengaju = $request->nama_pengajuan;
-            $admin = $user->name;
-            $notrx = 'TRX' . date('Y') . strtoupper(substr($pengaju, 0, 2)) . date('m') . strtoupper(substr($admin, 0, 2)) . date('d');
+            $notrx = 'TRX' . date('Y') . Str::random(10) . date('dm');
 
             // Simpan transaksi
             $trx = new Transaksi();
