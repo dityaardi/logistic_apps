@@ -102,9 +102,6 @@
         <label for="nama_pengajuan">Nama Pengajuan</label>
         <input type="text" name="nama_pengajuan" id="nama_pengajuan" required>
 
-        <label for="nama_admin">Nama Admin</label>
-        <input type="text" name="nama_admin" id="nama_admin" required>
-
         <label for="quantity">Quantity</label>
         <input type="number" name="quantity_total" id="quantity" readonly>
 
