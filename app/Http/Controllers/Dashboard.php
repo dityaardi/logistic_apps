@@ -104,6 +104,12 @@ class Dashboard extends Controller
             }
         }
 
+        if ($remainingQuantity > 0 && empty($selectedBarangs)) {
+            $selectedBarangs['message'] = "Stok barang kurang";
+
+            // return view('dashboard.create', compact('message'));
+        }
+
         // Kembalikan hasil sebagai respons JSON
         return response()->json($selectedBarangs);
     }

@@ -79,6 +79,7 @@
         </select>
         <input type="number" name="request_quantity" id="request_quantity" oninput="kuantitas()" />
         <button type="button" onclick="submitForm()">PROCESS REQUEST</button>
+       
     </form><br>
 
     <!-- Table for displaying selected items -->
@@ -118,8 +119,13 @@
                 url: '/process-request', // Replace with the correct URL
                 data: formData,
                 success: function(data) {
+                    console.log(data);
+                    if(data.message){
+                        alert(data.message);
+                    }else{
+                        updateTable(data);
+                    }
                     // Update table with selected items
-                    updateTable(data);
                 }
             });
         }
