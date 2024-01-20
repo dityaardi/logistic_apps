@@ -22,25 +22,26 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/', [Dashboard::class, 'index']);
-    Route::post('/process-request', [Dashboard::class, 'show']);
-    Route::post('/store', [Dashboard::class, 'store']);
+    // Route::get('/', [Dashboard::class, 'index']);
+    // Route::post('/process-request', [Dashboard::class, 'show']);
+    // Route::post('/store', [Dashboard::class, 'store']);
 
-    Route::get('/barang', [BarangController::class, 'index']);
-    Route::get('/barang/create', [BarangController::class, 'create']);
-    Route::post('/barang/store', [BarangController::class, 'store']);
-    Route::post('/barang/delete/{id_barang}', [BarangController::class, 'destroy']);
+    // Route::get('/barang', [BarangController::class, 'index']);
+    // Route::get('/barang/create', [BarangController::class, 'create']);
+    // Route::post('/barang/store', [BarangController::class, 'store']);
+    // Route::post('/barang/delete/{id_barang}', [BarangController::class, 'destroy']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-// Route::get('/', [Dashboard::class, 'index']);
-// Route::post('/process-request', [Dashboard::class, 'show']);
-// Route::post('/store', [Dashboard::class, 'store']);
+Route::get('/', [Dashboard::class, 'index']);
+Route::get('/create', [Dashboard::class, 'create']);
+Route::post('/process-request', [Dashboard::class, 'show']);
+Route::post('/store', [Dashboard::class, 'store']);
 
-// Route::get('/barang', [BarangController::class, 'index']);
-// Route::get('/barang/create', [BarangController::class, 'create']);
-// Route::post('/barang/store', [BarangController::class, 'store']);
-// Route::post('/barang/delete/{id_barang}', [BarangController::class, 'destroy']);
+Route::get('/barang', [BarangController::class, 'index']);
+Route::get('/barang/create', [BarangController::class, 'create']);
+Route::post('/barang/store', [BarangController::class, 'store']);
+Route::post('/barang/delete/{id_barang}', [BarangController::class, 'destroy']);
 require __DIR__ . '/auth.php';

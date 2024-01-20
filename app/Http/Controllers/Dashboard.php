@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\DetailTransaksi;
 use App\Models\Transaksi;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class Dashboard extends Controller
@@ -16,7 +15,7 @@ class Dashboard extends Controller
     public function index()
     {
         return view('dashboard.index', [
-            'databarang' => Barang::select('nama_barang')->distinct()->get()
+            'transaksi' => Transaksi::all()
         ]);
     }
 
@@ -25,7 +24,9 @@ class Dashboard extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.create', [
+            'databarang' => Barang::select('nama_barang')->distinct()->get()
+        ]);
     }
 
     public function store(Request $request)
