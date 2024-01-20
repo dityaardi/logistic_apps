@@ -119,12 +119,9 @@
                 url: '/process-request', // Replace with the correct URL
                 data: formData,
                 success: function(data) {
-                    console.log(data);
-                    if(data.message){
-                        alert(data.message);
-                    }else{
-                        updateTable(data);
-                    }
+                    $('#result-body').empty();
+                    if(data.message) alert(data.message);
+                    else updateTable(data);
                     // Update table with selected items
                 }
             });
@@ -132,7 +129,6 @@
 
         // Update table with selected items
         function updateTable(data) {
-            $('#result-body').empty();
 
             data.forEach(function(item) {
                 var row = '<tr>';

@@ -104,10 +104,10 @@ class Dashboard extends Controller
             }
         }
 
-        if ($remainingQuantity > 0 && empty($selectedBarangs)) {
-            $selectedBarangs['message'] = "Stok barang kurang";
+        $totalQuantity = array_sum(array_column($selectedBarangs, 'quantity'));
 
-            // return view('dashboard.create', compact('message'));
+        if ($totalQuantity < $requestQuantity) {
+            $selectedBarangs['message'] = "Stok barang kurang";
         }
 
         // Kembalikan hasil sebagai respons JSON
