@@ -38,6 +38,7 @@
         </tbody>
     </table>
 
-    <a href="/barang/create"><button>TAMBAH</button></a>
+    <a href="/barang/create"><button>Tambah Barang</button></a>
+    <a href="/"><button>Data Transaksi</button></a>
 </body>
 </html>
