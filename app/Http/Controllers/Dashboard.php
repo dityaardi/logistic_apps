@@ -18,13 +18,15 @@ class Dashboard extends Controller
     public function index()
     {
         return view('dashboard.index', [
-            'databarang' => Barang::select('nama_barang')->distinct()->get()
+            'transaksi' => Transaksi::all()
         ]);
     }
 
     public function create()
     {
-        //
+        return view('dashboard.create', [
+            'databarang' => Barang::select('nama_barang')->distinct()->get()
+        ]);
     }
 
     public function store(Request $request)

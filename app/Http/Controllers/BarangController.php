@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BarangController extends Controller
 {
@@ -37,9 +38,7 @@ class BarangController extends Controller
             'expired_at' => 'required'
         ]);
 
-        $nmbrg = $request->nama_barang;
-        $grade = $request->grade;
-        $kodebarang = 'BRG' . date('d') . strtoupper(substr($nmbrg, 0, 2)) . date('Y') . strtoupper(substr($nmbrg, 2, 2)) . date('m') . strtoupper(substr($nmbrg, 4)) . strtoupper(substr($grade, 0, 1));
+        $kodebarang = 'BRG' . date('Y') . Str::random(10) . date('dm');
 
         $create = new Barang();
         $create->kode_produksi = $kodebarang;

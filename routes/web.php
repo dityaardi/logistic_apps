@@ -23,6 +23,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
 
     Route::get('/', [Dashboard::class, 'index']);
+    Route::get('/create', [Dashboard::class, 'create']);
     Route::post('/process-request', [Dashboard::class, 'show']);
     Route::post('/store', [Dashboard::class, 'store']);
 
