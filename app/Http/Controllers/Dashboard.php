@@ -73,9 +73,9 @@ class Dashboard extends Controller
 
         // Ambil data barang dari database berdasarkan nama barang
         $barangs = Barang::where('nama_barang', $barangName)
-            ->orderByRaw("expired_at > NOW()") // Pilih yang expired lebih dekat dengan hari ini
+            ->where('expired_at', '>', now()) // Hanya ambil barang yang belum kedaluwarsa
             ->orderBy('expired_at', 'asc')
-            ->orderBy('grade', 'asc') // Pilih yang memiliki grade lebih tinggi
+            ->orderBy('grade', 'desc') // Urutkan grade secara descending untuk mendapatkan yang tertinggi lebih dulu
             ->get();
 
         // Logika pemilihan barang sesuai dengan jumlah request
